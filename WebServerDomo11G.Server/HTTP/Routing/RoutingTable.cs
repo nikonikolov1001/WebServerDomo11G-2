@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using WebServerDomo11G.Server.Common;
 using WebServerDomo11G.Server.Contracts;
 using WebServerDomo11G.Server.Responses;
+using WebServerDomo11G.Server.HTTP; 
 
 namespace WebServerDomo11G.Server.HTTP.Routing
 {
     public class RoutingTable : IRoutingTable
     {
-        private readonly Dictionary<Method,Dictionary<string, Response>> routes;
+        private readonly Dictionary<Method, Dictionary<string, Response>> routes;
 
         public RoutingTable()
         {

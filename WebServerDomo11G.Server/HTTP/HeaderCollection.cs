@@ -2,36 +2,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WebServerDomo11G.Server.HTTP
 {
-	public class HeaderCollection : IEnumerable<Header>
-	{
-		private readonly Dictionary<string, Header> headers;
+    public class HeaderCollection : IEnumerable<HeaderItem>
+    {
+        private readonly List<HeaderItem> headers = new List<HeaderItem>();
 
-		public HeaderCollection()
-		{
-			headers = new Dictionary<string, Header>();
-		}
-
-		public int Count => headers.Count;
-
-		public void Add(string name, string value) 
-		{
-			var header = new Header(name, value);
-			headers.Add(name, header);
-		}
-
-        public IEnumerator<Header> GetEnumerator()
+        public void Add(string name, string value)
         {
-			return headers.Values.GetEnumerator();
+            name = name?.Trim();
+            value = value?.Trim();
+
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Header name cannot be null or empty", nameof(name));
+
+            var existing = headers.FirstOrDefault(h => string.Equals(h.Name, name, StringComparison.OrdinalIgnoreCase));
+            if (existing != null)
+            {
+                headers.Remove(existing);
+            }
+            headers.Add(new HeaderItem(name, value));
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-			return GetEnumerator();
-        }
+        public IEnumerator<HeaderItem> GetEnumerator() => headers.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public int Count => headers.Count;
     }
 }
