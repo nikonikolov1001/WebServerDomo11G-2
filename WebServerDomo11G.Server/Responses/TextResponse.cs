@@ -13,6 +13,12 @@ namespace WebServerDomo11G.Server.Responses
             : base(content, ContentType.PlainText)
         {
         }
+
+        public TextResponse(string content, Action<Request, Response> preRenderAction)
+            : base(content, ContentType.PlainText)
+        {
+            this.PreRenderAction = preRenderAction;
+        }
     }
 
 }

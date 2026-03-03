@@ -8,11 +8,11 @@ namespace WebServerDomo11G.Demo
     {
         static void Main(string[] args)
         {
+            var startup = new Startup();
+
             var server = new HttpServer(5000, routes =>
             {
-                routes.MapGet("/", new HtmlResponse("<h1>Home</h1><p>Welcome to WebServerDomo11G</p>"));
-                routes.MapGet("/text", new TextResponse("Plain text response"));
-                routes.MapGet("/redirect", new RedirectResponse("/"));
+                startup.Configure(routes);
             });
 
             server.Start();

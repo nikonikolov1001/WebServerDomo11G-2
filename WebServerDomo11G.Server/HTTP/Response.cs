@@ -18,6 +18,10 @@ namespace WebServerDomo11G.Server.HTTP
 
         public HeaderCollection Headers { get; set; } = new HeaderCollection();
 
+        public CookieCollection Cookies { get; set; } = new CookieCollection();
+
+        public Action<Request, Response> PreRenderAction { get; set; }
+
         public string body { get; set; }
 
         public override string ToString()
@@ -47,6 +51,11 @@ namespace WebServerDomo11G.Server.HTTP
             foreach (var header in Headers)
             {
                 result.Append($"{header.Name}: {header.Value}\r\n");
+            }
+
+            foreach (var cookie in Cookies)
+            {
+                result.Append($"Set-Cookie: {cookie}\r\n");
             }
 
             result.Append("\r\n");

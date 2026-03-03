@@ -51,6 +51,13 @@ namespace WebServerDomo11G.Server
                 var request = Request.Parse(requestString);
                 var response = routes.MatchRequest(request);
 
+                AddSession(request, response);
+
+                if (response.PreRenderAction != null)
+                {
+                    response.PreRenderAction(request, response);
+                }
+
                 WriteResponse(networkStream, response);
 
                 connection.Close();
@@ -85,6 +92,16 @@ namespace WebServerDomo11G.Server
             }
             while (networkStream.DataAvailable);
             return requestBuilder.ToString();
+        }
+
+        private void AddSession(Request request, Response response)
+        {
+            var session = request.Session;
+            if (!session.ContainsKey(Session.SessionCurrentDateKey))
+            {
+                session[Session.SessionCurrentDateKey] = DateTime.UtcNow.ToString("o");
+                response.Cookies.Add(Session.SessionCookieName, session.Id);
+            }
         }
     }
 }
